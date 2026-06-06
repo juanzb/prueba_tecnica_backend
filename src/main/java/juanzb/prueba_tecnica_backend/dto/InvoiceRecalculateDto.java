@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public record InvoiceRecalculateRequest(
+public record InvoiceRecalculateDto(
     @NotNull(message = "El nuevo subtotal es requerido.")
     @Positive(message = "El subtotoal debe ser mayor que cero (0).")
     BigDecimal newSubtotal,
