@@ -29,13 +29,13 @@ public class Invoice {
 
     // Getters
     public Long getId() { return id; }
-    public BigDecimal getGeneralSubtotal() { return subtotal; }
+    public BigDecimal getSubtotal() { return subtotal; }
     public BigDecimal getTaxAmount() { return taxAmount; }
     public BigDecimal getTotalAmount() { return totalAmount; }
     public List<InvoiceDetail> getDetails() { return details; }
 
     // Setters
-    public void setGeneralSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
     public void setTaxAmount(BigDecimal taxAmount) { this.taxAmount = taxAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
     public void setDetails(List<InvoiceDetail> details) { this.details = details; }
