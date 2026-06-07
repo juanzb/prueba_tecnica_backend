@@ -72,12 +72,15 @@ public class InvoiceService {
 
     public Invoice recalculateInvoice(Long id, InvoiceRecalculateDto dataInvoice) {
         Invoice invoice = this.findById(id);        
+        invoice.getDetails().size();
         entityManager.detach(invoice);
 
         BigDecimal oldSubtotal = invoice.getSubtotal();
         BigDecimal newSubtotal = dataInvoice.newSubtotal();
         BigDecimal difference = newSubtotal.subtract(oldSubtotal).abs();
         BigDecimal maxAllowed = dataInvoice.userRole().getMaxIncrement();
+        IO.println("id de factura a modificar: " + id);
+        IO.println(dataInvoice);
 
         if (difference.compareTo(maxAllowed) > 0) {
             throw new RuntimeException("El cambio en el subtotal excede el máximo permitido para el usuario de tipo " + dataInvoice.userRole().name());

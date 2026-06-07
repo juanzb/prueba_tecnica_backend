@@ -43,6 +43,12 @@ public class InvoiceController {
         return ResponseEntity.ok(updatedInvoice);
     }
 
+    @PutMapping("/{id}/recalculate-save")
+    public ResponseEntity<Invoice> recalculateInvoiceToSave(@PathVariable("id") Long id, @Valid @RequestBody InvoiceRecalculateDto data) {
+        Invoice updatedInvoice = invoiceService.recalculateInvoiceToSave(id, data);
+        return ResponseEntity.ok(updatedInvoice);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable("id") Long id) {
         invoiceService.delete(id);
