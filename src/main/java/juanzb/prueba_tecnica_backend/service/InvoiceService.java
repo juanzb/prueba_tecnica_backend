@@ -35,7 +35,6 @@ public class InvoiceService {
 
     @Transactional
     public Invoice create(InvoiceCreateDto dataInvoice) {
-        IO.println(dataInvoice);
         Invoice invoice = new Invoice();
         
         if (dataInvoice.details() != null) {
@@ -67,7 +66,6 @@ public class InvoiceService {
     }
 
     public void delete(Long id) {
-        IO.println(id);
         this.findById(id);
         invoiceRepository.deleteById(id);
     }
