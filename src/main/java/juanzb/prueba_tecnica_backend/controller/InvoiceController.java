@@ -27,7 +27,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Invoice> getById(@PathVariable Long id) {
+    public ResponseEntity<Invoice> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(invoiceService.findById(id));
     }
 
@@ -38,13 +38,13 @@ public class InvoiceController {
     }
 
     @PutMapping("/{id}/recalculate")
-    public ResponseEntity<Invoice> recalculateInvoice(@PathVariable Long id, @Valid @RequestBody InvoiceRecalculateDto data) {
+    public ResponseEntity<Invoice> recalculateInvoice(@PathVariable("id") Long id, @Valid @RequestBody InvoiceRecalculateDto data) {
         Invoice updatedInvoice = invoiceService.recalculateInvoice(id, data);
         return ResponseEntity.ok(updatedInvoice);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteInvoice(@PathVariable("id") Long id) {
         invoiceService.delete(id);
         return ResponseEntity.noContent().build();
     }

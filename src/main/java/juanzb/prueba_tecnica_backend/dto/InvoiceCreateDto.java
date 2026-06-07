@@ -1,19 +1,23 @@
 package juanzb.prueba_tecnica_backend.dto;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 public record InvoiceCreateDto(
-    
-    @NotNull(message = "El subtotal es requerido")
-    @Positive(message = "El subtotal debe ser mayor a 0")
-    BigDecimal subtotal,
 
+    @NotEmpty(message = "El nombre del cliente no puede estar vacío")
+    String client,
+
+    @Nullable
+    String description,
+ 
     @NotEmpty(message = "La factura debe tener al menos un producto")
     @Valid 
     List<DetailDto> details
