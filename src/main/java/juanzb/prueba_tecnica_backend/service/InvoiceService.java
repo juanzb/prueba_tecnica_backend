@@ -4,6 +4,7 @@ import juanzb.prueba_tecnica_backend.dto.InvoiceCreateDto;
 import juanzb.prueba_tecnica_backend.dto.InvoiceRecalculateDto;
 import juanzb.prueba_tecnica_backend.entity.Invoice;
 import juanzb.prueba_tecnica_backend.entity.InvoiceDetail;
+import juanzb.prueba_tecnica_backend.exception.ResourceNotFoundException;
 import juanzb.prueba_tecnica_backend.repository.InvoiceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class InvoiceService {
 
     public Invoice findById(Long id) {
         return invoiceRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Factura no encontrada"));
+            .orElseThrow(() -> new ResourceNotFoundException("Factura no encontrada"));
     }
 
     @Transactional
@@ -65,9 +66,10 @@ public class InvoiceService {
         return invoiceRepository.save(invoice);
     }
 
-    public void delete(Long id) {
-        this.findById(id);
+    public Invoice delete(Long id) {
+        Invoice invoiceTodelete = this.findById(id);
         invoiceRepository.deleteById(id);
+        return invoiceTodelete;
     }
 
     public Invoice recalculateInvoice(Long id, InvoiceRecalculateDto dataInvoice) {
@@ -79,8 +81,6 @@ public class InvoiceService {
         BigDecimal newSubtotal = dataInvoice.newSubtotal();
         BigDecimal difference = newSubtotal.subtract(oldSubtotal).abs();
         BigDecimal maxAllowed = dataInvoice.userRole().getMaxIncrement();
-        IO.println("id de factura a modificar: " + id);
-        IO.println(dataInvoice);
 
         if (difference.compareTo(maxAllowed) > 0) {
             throw new RuntimeException("El cambio en el subtotal excede el máximo permitido para el usuario de tipo " + dataInvoice.userRole().name());

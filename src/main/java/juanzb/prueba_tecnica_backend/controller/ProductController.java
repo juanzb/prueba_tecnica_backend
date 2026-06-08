@@ -1,5 +1,6 @@
 package juanzb.prueba_tecnica_backend.controller;
 
+import juanzb.prueba_tecnica_backend.dto.ApiResponseDto;
 import juanzb.prueba_tecnica_backend.entity.Products;
 import juanzb.prueba_tecnica_backend.service.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Products>> getStaticCatalog() {
-        return ResponseEntity.ok(productService.getStaticCatalog());
+    public ResponseEntity<ApiResponseDto<List<Products>>> getStaticCatalog() {
+        List<Products> products = productService.getStaticCatalog();
+        return ResponseEntity.ok(new ApiResponseDto<>(true, "Catálogo de productos recuperado exitosamente.", products));
     }
 }
