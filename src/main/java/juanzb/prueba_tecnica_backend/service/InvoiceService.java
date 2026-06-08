@@ -79,11 +79,14 @@ public class InvoiceService {
 
         BigDecimal oldSubtotal = invoice.getSubtotal();
         BigDecimal newSubtotal = dataInvoice.newSubtotal();
-        BigDecimal difference = newSubtotal.subtract(oldSubtotal).abs();
-        BigDecimal maxAllowed = dataInvoice.userRole().getMaxIncrement();
-
-        if (difference.compareTo(maxAllowed) > 0) {
-            throw new RuntimeException("El cambio en el subtotal excede el máximo permitido para el usuario de tipo " + dataInvoice.userRole().name());
+        
+        if (newSubtotal.compareTo(oldSubtotal) > 0) {
+            BigDecimal difference = newSubtotal.subtract(oldSubtotal);
+            BigDecimal maxAllowed = dataInvoice.userRole().getMaxIncrement();
+    
+            if (difference.compareTo(maxAllowed) > 0) {
+                throw new RuntimeException("El incremento del subtotal excede el máximo permitido para el usuario de tipo " + dataInvoice.userRole().name());
+            }
         }
 
         BigDecimal factor = newSubtotal.divide(oldSubtotal, 8, RoundingMode.HALF_UP);
@@ -93,6 +96,9 @@ public class InvoiceService {
             detail.setTotalPrice(newTotalPrice);
 
             BigDecimal newUnitPrice = newTotalPrice.divide(new BigDecimal(detail.getQuantity()), 2, RoundingMode.HALF_UP);
+            if (newUnitPrice.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RuntimeException("El precio recalculado de un detalle no puede ser menor o igual a cero. Ingrese un valor de subtotal mayor.");
+            }
             detail.setUnitPrice(newUnitPrice);
         }
 
