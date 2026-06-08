@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  # Database
+  db:
+    image: mysql:8.0
+    container_name: mysql_database
+    restart: always
+    environment:
+      MYSQL_DATABASE: prueba_tecnica
+      MYSQL_ROOT_PASSWORD: n3td4m1ndbzb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: n3t4dm1ndb
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./migration.sql:/docker-entrypoint-initdb.d/migration.sql
+
+  # Backend Java
+  backend:
+    image: juanzb30/prueba-tecnica-backend
+    container_name: java_backend_app
+    restart: always
+    ports:
+      - "4000:3000"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/prueba_tecnica?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=n3t4dm1ndb
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none # Apagamos la revisión de Hibernate
+
+  # Frontend Angular
+  frontend:
+    image: juanzb30/prueba-tecnica-frontend
+    container_name: ng_frontend_app
+    restart: always
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
